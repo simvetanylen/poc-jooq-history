@@ -1,0 +1,12 @@
+
+spring:
+    main:
+        banner-mode: 'off'
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/xpatrio?characterEncoding=UTF-8
+        username: xpatrio
+        password: xpatrio
+        initialization-mode: always
+    jooq:
+        sql-dialect: postgres
