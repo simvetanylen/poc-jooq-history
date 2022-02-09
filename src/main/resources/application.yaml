@@ -10,3 +10,10 @@ spring:
         initialization-mode: always
     jooq:
         sql-dialect: postgres
+    flyway:
+        enabled: true
+        table: schema_version
+        baseline-on-migrate: true
+        out-of-order: true
+        clean-disabled: true
+        ignore-missing-migrations: true
