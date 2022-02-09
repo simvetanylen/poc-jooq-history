@@ -4,6 +4,7 @@ import org.jooq.DSLContext
 import org.jooq.Record
 import org.jooq.impl.DSL.*
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.event.TransactionalEventListener
 import poc.jooq.generated.db.Tables.*
 import poc.jooq.generated.db.tables.records.CustomerHistoryRecord
 import poc.jooq.generated.db.tables.records.CustomerRecord
@@ -13,7 +14,12 @@ class CustomerHistoryRepository(
     private val jooq: DSLContext
 ) {
 
-    fun save(customer: CustomerRecord) {
+    @TransactionalEventListener
+    fun handleCustomerChanged(event: CustomerChangedEvent) {
+        this.save(event.customer)
+    }
+
+    private fun save(customer: CustomerRecord) {
         val history = jooq.newRecord(CUSTOMER_HISTORY)
         history.id = customer.id
         history.firstname = customer.firstname

@@ -4,7 +4,6 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import poc.jooq.generated.db.tables.records.CustomerHistoryRecord
 import poc.jooq.generated.db.tables.records.CustomerRecord
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 @RestController
@@ -97,6 +96,7 @@ class CustomerWebService(
     fun getFieldsHistory(
         @PathVariable id: Long
     ): MutableMap<String, MutableList<FieldValueDto>> {
+        // TODO : need improvements, can be done in SQL
         val histories = customerHistories.findAllFor(id)
 
         val firstnames = mutableListOf<FieldValueDto>()
@@ -181,9 +181,7 @@ class CustomerWebService(
     ): CustomerReadDto {
         val customer = customers.new()
         body.writeChangesTo(customer)
-        customer.store()
-        customer.refresh()
-        customerHistories.save(customer)
+        customers.store(customer)
         return customer.toDto()
     }
 
@@ -194,9 +192,7 @@ class CustomerWebService(
     ): CustomerReadDto {
         val customer = customers.find(id)
         body.writeChangesTo(customer)
-        customer.store()
-        customer.refresh()
-        customerHistories.save(customer)
+        customers.store(customer)
         return customer.toDto()
     }
 
